@@ -42,8 +42,10 @@ def index_to_position(index: Index, strides: Strides) -> int:
     Returns:
         Position in storage
     """
-
-    raise NotImplementedError("Need to include this file from past assignment.")
+    output = 0
+    for i in range((len(strides) - 1), -1, -1):
+        output += index[i] * strides[i]
+    return output
 
 
 def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
@@ -59,7 +61,11 @@ def to_index(ordinal: int, shape: Shape, out_index: OutIndex) -> None:
         out_index : return index corresponding to position.
 
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    cur_ordinal = ordinal + 0
+    for i in range(len(shape) - 1, -1, -1):
+        sh = shape[i]
+        out_index[i] = int(cur_ordinal % sh)
+        cur_ordinal = cur_ordinal // sh
 
 
 def broadcast_index(
@@ -81,7 +87,11 @@ def broadcast_index(
     Returns:
         None
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    for i in range(len(shape) - 1, -1, -1):
+        if shape[i] == 1:
+            out_index[i] = 0
+        else:
+            out_index[i] = big_index[len(big_shape) - len(shape) + i]
 
 
 def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
@@ -98,7 +108,22 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
     Raises:
         IndexingError : if cannot broadcast
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+
+    output = []
+    shape1 = list(shape1)
+    shape2 = list(shape2)
+    while len(shape1) != len(shape2):
+        if len(shape1) < len(shape2):
+            shape1.insert(0, 1)
+        else:
+            shape2.insert(0, 1)
+    for i in range(len(shape1)):
+        d1 = shape1[i]
+        d2 = shape2[i]
+        if d1 != 1 and d2 != 1 and d1 != d2:
+            raise IndexingError(f"{shape1} and {shape2} can't broadcast")
+        output.append(max(d1, d2))
+    return tuple(output)
 
 
 def strides_from_shape(shape: UserShape) -> UserStrides:
@@ -204,13 +229,30 @@ class TensorData:
     def tuple(self) -> Tuple[Storage, Shape, Strides]:
         return (self._storage, self._shape, self._strides)
 
+    # def permute(self, *order: int) -> TensorData:
+    #     """
+    #     Permute the dimensions of the tensor.
+
+    #     Args:
+    #         order (list): a permutation of the dimensions
+
+    #     Returns:
+    #         New `TensorData` with the same storage and a new dimension order.
+    #     """
+    #     assert list(sorted(order)) == list(range(len(self.shape))), f"Must give a position to each dimension. Shape: {self.shape} Order: {order}"
+
+    #     newShape = list(self.shape)
+    #     newStride = list(self.strides)
+    #     for i in range(len(order)):
+    #         newShape[i] = self.shape[order[i]]
+    #         newStride[i] = self.strides[order[i]]
+    #     newTensor = TensorData(self._storage, tuple(newShape), tuple(newStride))
+    #     return newTensor
     def permute(self, *order: int) -> TensorData:
         """
         Permute the dimensions of the tensor.
-
         Args:
-            *order: a permutation of the dimensions
-
+            order (list): a permutation of the dimensions
         Returns:
             New `TensorData` with the same storage and a new dimension order.
         """
@@ -218,7 +260,14 @@ class TensorData:
             range(len(self.shape))
         ), f"Must give a position to each dimension. Shape: {self.shape} Order: {order}"
 
-        raise NotImplementedError("Need to include this file from past assignment.")
+        # ASSIGN2.1
+        return TensorData(
+            self._storage,
+            tuple([self.shape[o] for o in order]),
+            tuple([self._strides[o] for o in order]),
+        )
+    # END ASSIGN2.1
+
 
     def to_string(self) -> str:
         s = ""
