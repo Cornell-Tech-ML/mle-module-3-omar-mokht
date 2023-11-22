@@ -35,6 +35,10 @@ The files that will be synced are:
 
 **GRAPH**
 
+<img width="719" alt="Screen Shot 2023-11-21 at 11 16 52 PM" src="https://github.com/Cornell-Tech-ML/mle-module-3-omar-mokht/assets/111816253/4f62ffc5-da8e-4b4e-9202-6b40fdead0be">
+
+<img width="474" alt="Screen Shot 2023-11-21 at 11 17 22 PM" src="https://github.com/Cornell-Tech-ML/mle-module-3-omar-mokht/assets/111816253/b7429e51-0ab6-458c-b316-0667b832b220">
+
 *************************************************************************************************************************************************************
 
 **CPU SIMPLE 100**
