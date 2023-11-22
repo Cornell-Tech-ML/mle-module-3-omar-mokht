@@ -41,7 +41,7 @@ The files that will be synced are:
 
 *************************************************************************************************************************************************************
 
-[Parallel_Check]()
+[Parallel_Check](log_files/parallel_check_logs.txt)
 
 **CPU SIMPLE 100**
 
