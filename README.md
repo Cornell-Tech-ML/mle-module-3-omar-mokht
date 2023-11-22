@@ -43,6 +43,35 @@ The files that will be synced are:
 
 [Parallel_Check](log_files/parallel_check_logs.txt)
 
+**CPU**
+
+
+[CPU Simple 100](log_files/cpu_simple_100.txt)
+
+[CPU Split 100](log_files/cpu_split_100.txt)
+
+[CPU Diag 100](log_files/cpu_diag_100.txt)
+
+[CPU XOR 100](log_files/cpu_xor_100.txt)
+
+[CPU Split 200](log_files/cpu_split_200.txt)
+
+
+**GPU**
+
+
+[GPU Simple 100](log_files/gpu_simple_100.txt)
+
+[GPU Split 100](log_files/gpu_split_100.txt)
+
+[GPU Diag 100](log_files/gpu_diag_100.txt)
+
+[GPU XOR 100](log_files/gpu_XOR_100.txt)
+
+[GPU Split 200](log_files/gpu_split_200.txt)
+
+
+
 **CPU SIMPLE 100**
 
 
