@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Iterable, List, Tuple
+from typing import Any, Iterable, Tuple, List
 
 from typing_extensions import Protocol
 
@@ -22,7 +22,17 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
     Returns:
         An approximation of $f'_i(x_0, \ldots, x_{n-1})$
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    ls1: List[Variable] = []
+    ls2: List[Variable] = []
+    ls1.extend(vals[0:arg])
+    ls1.append(vals[arg] + epsilon)
+    ls1.extend(vals[arg + 1 :])
+    ls2.extend(vals[0:arg])
+    print(ls1)
+    ls2.append(vals[arg] - epsilon)
+    ls2.extend(vals[arg + 1 :])
+    return (f(*ls1) - f(*ls2)) / (2 * epsilon)
+    # TODO: Implement for Task 1.1.
 
 
 variable_count = 1
@@ -60,7 +70,40 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     Returns:
         Non-constant Variables in topological order starting from the right.
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    order: List[Variable] = []
+    seen = set()
+
+    def visit(var: Variable) -> None:
+        if var.unique_id in seen or var.is_constant():
+            return
+        if not var.is_leaf():
+            for m in var.parents:
+                if not m.is_constant():
+                    visit(m)
+        seen.add(var.unique_id)
+        order.insert(0, var)
+
+    visit(variable)
+    return order
+
+    # permMarks = {}
+    # sorted_nodes: List[Variable] = []
+    # Nodes = [variable]
+
+    # def visit(node: Variable) -> None:
+    #     if node.unique_id in permMarks:
+    #         return
+    #     for n in node.parents:
+    #         visit(n)
+    #     permMarks[node.unique_id] = 0
+    #     sorted_nodes.insert(0, node)
+
+    # while Nodes:
+    #     visit(Nodes.pop())
+    # return sorted_nodes
+
+    # TODO: Implement for Task 1.4.
+    # raise NotImplementedError("Need to implement for Task 1.4")
 
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
@@ -74,7 +117,38 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
 
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
-    raise NotImplementedError("Need to include this file from past assignment.")
+    # sorted_nodes: Iterable[Variable] = topological_sort(variable)
+
+    # derivatives = {}
+    # derivatives[variable.unique_id] = deriv
+    # for var in sorted_nodes:
+    #     currDev = derivatives.pop(var.unique_id, 0)
+    #     if var.is_leaf():
+    #         var.accumulate_derivative(currDev)
+    #         continue
+    #     for v, d in var.chain_rule(currDev):
+    #         v_id = v.unique_id
+    #         if v_id in derivatives:
+    #             derivatives[v_id] += d
+    #         else:
+    #             derivatives[v_id] = d
+
+    queue = topological_sort(variable)
+    derivatives = {}
+    derivatives[variable.unique_id] = deriv
+    for var in queue:
+        deriv = derivatives[var.unique_id]
+        if var.is_leaf():
+            var.accumulate_derivative(deriv)
+        else:
+            for v, d in var.chain_rule(deriv):
+                if v.is_constant():
+                    continue
+                derivatives.setdefault(v.unique_id, 0.0)
+                derivatives[v.unique_id] = derivatives[v.unique_id] + d
+
+    # TODO: Implement for Task 1.4.
+    # raise NotImplementedError("Need to implement for Task 1.4")
 
 
 @dataclass
