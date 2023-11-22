@@ -266,8 +266,8 @@ class TensorData:
             tuple([self.shape[o] for o in order]),
             tuple([self._strides[o] for o in order]),
         )
-    # END ASSIGN2.1
 
+    # END ASSIGN2.1
 
     def to_string(self) -> str:
         s = ""
